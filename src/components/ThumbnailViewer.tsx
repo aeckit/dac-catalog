@@ -5,6 +5,7 @@ import { renderSolvedGroups, getDefs, getStyles } from '@aeckit/dac-renderer-svg
 export interface ThumbnailViewerProps {
   doc: any;
   nestedDocs?: Map<string, any>;
+  theme?: 'light' | 'dark';
   class?: string;
 }
 
@@ -71,13 +72,15 @@ export function ThumbnailViewer(props: ThumbnailViewerProps) {
       const vbW = width + padding * 2;
       const vbH = height + padding * 2;
 
+      const currentTheme = props.theme || 'light';
+
       return `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="${vbX} ${vbY} ${vbW} ${vbH}" class="w-full h-full pointer-events-none select-none">
           ${getDefs()}
           <g transform="scale(1, -1)">
             ${geometries}
           </g>
-          ${getStyles('dark')}
+          ${getStyles(currentTheme)}
         </svg>
       `;
     } catch (err) {
@@ -88,7 +91,9 @@ export function ThumbnailViewer(props: ThumbnailViewerProps) {
 
   return (
     <div 
-      class={`w-full h-full flex items-center justify-center overflow-hidden bg-slate-900/60 rounded-t-lg relative ${props.class || ''}`}
+      class={`w-full h-full flex items-center justify-center overflow-hidden rounded-t-lg relative transition-colors ${
+        props.theme === 'dark' ? 'bg-slate-900/60' : 'bg-slate-100/90'
+      } ${props.class || ''}`}
       innerHTML={thumbnailSvg()}
     />
   );

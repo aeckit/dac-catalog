@@ -1,4 +1,4 @@
-import { createSignal, createMemo } from 'solid-js';
+import { createSignal, createMemo, createEffect } from 'solid-js';
 import {
   catalogItems,
   catalogNestedDocs,
@@ -9,12 +9,24 @@ import type { CatalogItem } from './types';
 import { Header } from './components/Header';
 import { DetailCard } from './components/DetailCard';
 import { DetailModal } from './components/DetailModal';
-import { Layers, SearchX } from 'lucide-solid';
+import { SearchX } from 'lucide-solid';
 
 export default function App() {
   const [searchQuery, setSearchQuery] = createSignal('');
   const [selectedCategory, setSelectedCategory] = createSignal('All');
   const [selectedItem, setSelectedItem] = createSignal<CatalogItem | null>(null);
+  
+  // Theme state: defaults to 'light'
+  const [theme, setTheme] = createSignal<'light' | 'dark'>('light');
+
+  createEffect(() => {
+    const isDark = theme() === 'dark';
+    document.documentElement.classList.toggle('dark', isDark);
+  });
+
+  const toggleTheme = () => {
+    setTheme(t => t === 'light' ? 'dark' : 'light');
+  };
 
   const categories = getAllCategories();
 
@@ -23,7 +35,7 @@ export default function App() {
   });
 
   return (
-    <div class="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+    <div class="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
       {/* Sticky Header */}
       <Header
         searchQuery={searchQuery()}
@@ -33,17 +45,19 @@ export default function App() {
         onSelectCategory={setSelectedCategory}
         totalCount={catalogItems.length}
         filteredCount={filteredItems().length}
+        theme={theme()}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Main Gallery Area */}
       <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         {filteredItems().length === 0 ? (
           <div class="py-24 flex flex-col items-center justify-center text-center">
-            <div class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mb-3">
+            <div class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 mb-3 shadow-xs">
               <SearchX class="w-6 h-6" />
             </div>
-            <h2 class="text-base font-semibold text-slate-200">No matching details found</h2>
-            <p class="text-xs text-slate-400 mt-1 max-w-md">
+            <h2 class="text-base font-semibold text-slate-800 dark:text-slate-200">No matching details found</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md">
               No architectural details matched "{searchQuery()}". Try clearing filters or searching for terms like "timber", "joist", or "framing".
             </p>
             <button
@@ -51,7 +65,7 @@ export default function App() {
                 setSearchQuery('');
                 setSelectedCategory('All');
               }}
-              class="mt-4 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+              class="mt-4 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors"
             >
               Reset Filters
             </button>
@@ -62,6 +76,7 @@ export default function App() {
               <DetailCard
                 item={item}
                 nestedDocs={catalogNestedDocs}
+                theme={theme()}
                 onSelect={(selected) => setSelectedItem(selected)}
               />
             ))}
@@ -70,9 +85,9 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer class="border-t border-slate-900 bg-slate-950/40 py-6 text-center text-xs text-slate-500">
+      <footer class="border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950/40 py-6 text-center text-xs text-slate-500 transition-colors">
         <p>
-          Powered by <a href="https://github.com/aeckit/dac" class="text-amber-500 hover:underline">Drawing-as-Code (DaC)</a> & <a href="https://www.solidjs.com" class="text-slate-400 hover:underline">SolidJS</a> • Open-source AEC CAD components
+          Powered by <a href="https://github.com/aeckit/dac" class="text-amber-600 dark:text-amber-500 hover:underline font-medium">Drawing-as-Code (DaC)</a> & <a href="https://www.solidjs.com" class="text-slate-700 dark:text-slate-400 hover:underline">SolidJS</a> • Open-source AEC CAD components
         </p>
       </footer>
 
@@ -80,6 +95,7 @@ export default function App() {
       <DetailModal
         item={selectedItem()}
         nestedDocs={catalogNestedDocs}
+        theme={theme()}
         onClose={() => setSelectedItem(null)}
       />
     </div>
