@@ -1,0 +1,64 @@
+{
+  "type": "CAD::Detail",
+  "version": "1.0",
+  "metadata": {
+    "id": "wood-section-detail",
+    "title": "Sill Plate & Stud on Concrete",
+    "description": "Foundation wall assembly demonstrating dynamic construct references with parameter overrides.",
+    "category": "Foundation",
+    "tags": ["foundation", "sill-plate", "stud", "concrete", "assembly"],
+    "notes": [
+      "Treated wood sill plate with moisture barrier over concrete stem wall.",
+      "Anchor bolt embedded into concrete foundation."
+    ]
+  },
+  "scale": "1:1",
+  "parameters": {},
+  "geometry": [
+    {
+      "componentId": "concrete_foundation",
+      "type": "CAD::Shape::Rectangle",
+      "x": 0,
+      "y": 0,
+      "width": 10,
+      "height": 4,
+      "color": "#94a3b8",
+      "fill": "rgba(203, 213, 225, 0.2)",
+      "hatch": "Concrete",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "sill_plate_instance",
+      "type": "ConstructReference",
+      "constructId": "wood-section-construct.json",
+      "x": 2,
+      "y": 4,
+      "rotation": 0,
+      "parameterOverrides": {
+        "lumberSize": "2x4"
+      }
+    },
+    {
+      "componentId": "stud_instance",
+      "type": "ConstructReference",
+      "constructId": "wood-section-construct.json",
+      "x": 2,
+      "y": 5.5,
+      "rotation": 90,
+      "parameterOverrides": {
+        "lumberSize": "2x4"
+      }
+    },
+    {
+      "componentId": "dim_foundation_width",
+      "type": "CAD::Annotation::Dimension",
+      "x1": 0,
+      "y1": 0,
+      "x2": 10,
+      "y2": 0,
+      "offset": 20,
+      "format": "architectural",
+      "prefix": "FTG: "
+    }
+  ]
+}

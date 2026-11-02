@@ -1,0 +1,87 @@
+import { createSignal, createMemo } from 'solid-js';
+import {
+  catalogItems,
+  catalogNestedDocs,
+  getAllCategories,
+  filterCatalogItems,
+} from './lib/catalog';
+import type { CatalogItem } from './types';
+import { Header } from './components/Header';
+import { DetailCard } from './components/DetailCard';
+import { DetailModal } from './components/DetailModal';
+import { Layers, SearchX } from 'lucide-solid';
+
+export default function App() {
+  const [searchQuery, setSearchQuery] = createSignal('');
+  const [selectedCategory, setSelectedCategory] = createSignal('All');
+  const [selectedItem, setSelectedItem] = createSignal<CatalogItem | null>(null);
+
+  const categories = getAllCategories();
+
+  const filteredItems = createMemo(() => {
+    return filterCatalogItems(catalogItems, searchQuery(), selectedCategory());
+  });
+
+  return (
+    <div class="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+      {/* Sticky Header */}
+      <Header
+        searchQuery={searchQuery()}
+        onSearchChange={setSearchQuery}
+        categories={categories}
+        selectedCategory={selectedCategory()}
+        onSelectCategory={setSelectedCategory}
+        totalCount={catalogItems.length}
+        filteredCount={filteredItems().length}
+      />
+
+      {/* Main Gallery Area */}
+      <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        {filteredItems().length === 0 ? (
+          <div class="py-24 flex flex-col items-center justify-center text-center">
+            <div class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mb-3">
+              <SearchX class="w-6 h-6" />
+            </div>
+            <h2 class="text-base font-semibold text-slate-200">No matching details found</h2>
+            <p class="text-xs text-slate-400 mt-1 max-w-md">
+              No architectural details matched "{searchQuery()}". Try clearing filters or searching for terms like "timber", "joist", or "framing".
+            </p>
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('All');
+              }}
+              class="mt-4 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems().map((item) => (
+              <DetailCard
+                item={item}
+                nestedDocs={catalogNestedDocs}
+                onSelect={(selected) => setSelectedItem(selected)}
+              />
+            ))}
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer class="border-t border-slate-900 bg-slate-950/40 py-6 text-center text-xs text-slate-500">
+        <p>
+          Powered by <a href="https://github.com/aeckit/dac" class="text-amber-500 hover:underline">Drawing-as-Code (DaC)</a> & <a href="https://www.solidjs.com" class="text-slate-400 hover:underline">SolidJS</a> • Open-source AEC CAD components
+        </p>
+      </footer>
+
+      {/* Detail Modal */}
+      <DetailModal
+        item={selectedItem()}
+        nestedDocs={catalogNestedDocs}
+        onClose={() => setSelectedItem(null)}
+      />
+    </div>
+  );
+}
