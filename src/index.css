@@ -3,6 +3,34 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --app-bg-main: #f8fafc;
+    --app-bg-sidebar: #f8fafc;
+    --app-bg-panel: #ffffff;
+    --app-bg-canvas: #ffffff;
+    --app-border: #cbd5e1;
+    --app-text: #0f172a;
+    --app-text-muted: #64748b;
+    --app-btn-bg: #f1f5f9;
+    --app-btn-text: #0f172a;
+    --app-btn-hover: #e2e8f0;
+    --app-accent: #d97706;
+  }
+
+  .dark {
+    --app-bg-main: #0f172a;
+    --app-bg-sidebar: #0f172a;
+    --app-bg-panel: #0f172a;
+    --app-bg-canvas: #0f172a;
+    --app-border: #334155;
+    --app-text: #f8fafc;
+    --app-text-muted: #94a3b8;
+    --app-btn-bg: #1e293b;
+    --app-btn-text: #f8fafc;
+    --app-btn-hover: #334155;
+    --app-accent: #f59e0b;
+  }
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
