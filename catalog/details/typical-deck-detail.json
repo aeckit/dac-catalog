@@ -1,7 +1,7 @@
 {
   "type": "CAD::Detail",
   "version": "1.0",
-  "scale": "1-1/2=1-0",
+  "scale": "1-1/2\" = 1'-0\"",
   "metadata": {
     "id": "typical-deck-detail",
     "title": "Typical Deck Post-to-Footing & Beam Framing Detail",

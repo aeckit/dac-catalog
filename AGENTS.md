@@ -31,14 +31,14 @@ DaC models geometry in real-world units of **inches** (`1.0 = 1 inch`). Every do
 | Scale String | Architectural Label | Paper Ratio | Standard Application |
 |---|---|---|---|
 | `"1:1"` | Full Scale | `1.0` | **Constructs** (reusable parametric parts: nominal lumber sections, clips, brackets, custom joinery) |
-| `"3=1-0"` | `3" = 1'-0"` | `1:4` (`0.25`) | **Close-Up Connection Details** (sill plate to foundation, joist hangers, flashing, weep holes) |
-| `"1-1/2=1-0"` | `1-1/2" = 1'-0"` | `1:8` (`0.125`) | **Framing Assembly Details** (floor-to-wall assemblies, roof eave/soffit, window head/sill/jamb) |
-| `"1=1-0"` | `1" = 1'-0"` | `1:12` (`0.0833`) | **Partial Wall Sections & Stair Conditions** (multi-story wall envelopes, stair stringers/treads, millwork runs) |
-| `"3/4=1-0"` | `3/4" = 1'-0"` | `1:16` (`0.0625`) | **Large Building Sections** (floor-to-floor overview sections) |
+| `"3\" = 1'-0\""` | `3" = 1'-0"` | `1:4` (`0.25`) | **Close-Up Connection Details** (sill plate to foundation, joist hangers, flashing, weep holes) |
+| `"1-1/2\" = 1'-0\""` | `1-1/2" = 1'-0"` | `1:8` (`0.125`) | **Framing Assembly Details** (floor-to-wall assemblies, roof eave/soffit, window head/sill/jamb) |
+| `"1\" = 1'-0\""` | `1" = 1'-0"` | `1:12` (`0.0833`) | **Partial Wall Sections & Stair Conditions** (multi-story wall envelopes, stair stringers/treads, millwork runs) |
+| `"3/4\" = 1'-0\""` | `3/4" = 1'-0"` | `1:16` (`0.0625`) | **Large Building Sections** (floor-to-floor overview sections) |
 
 ### Scale Selection Defaults:
 - **Constructs**: Always use `"1:1"`.
-- **Standard Details**: Default to `"1-1/2=1-0"` for multi-member assemblies and `"3=1-0"` for close-up connection conditions.
+- **Standard Details**: Default to `"1-1/2\" = 1'-0\""` for multi-member assemblies and `"3\" = 1'-0\""` for close-up connection conditions.
 
 ---
 
