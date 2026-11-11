@@ -12,12 +12,11 @@ Live Gallery: **[aeckit.github.io/dac-catalog](https://aeckit.github.io/dac-cata
 - **One-Click Exports**:
   - **Copy JSON**: Ready to drop into the VS Code extension or web editor.
   - **Export SVG**: Clean vector drawings for reports or documentation.
-  - **Open in Playground**: Deep-link any detail directly into the full playground editor.
-- **Zero-Config Content Addition**: Drop a new `.json` file into `catalog/` and it automatically appears in the gallery!
+  - **Open in Playground**: [COMING SOON] Deep-link any detail directly into the full playground editor.
 
-## Adding a New Detail to the Catalog
+## Adding to the Catalog
 
-Add a `.json` file directly into the flat `catalog/` directory:
+Place new `.json` files in the corresponding `catalog/` subfolder (`catalog/details/` for `CAD::Detail` or `catalog/constructs/` for `CAD::Construct`), and follow the drawing conventions in [AGENTS.md](./AGENTS.md):
 
 ```json
 {
