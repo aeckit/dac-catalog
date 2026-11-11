@@ -1,0 +1,499 @@
+{
+  "type": "CAD::Detail",
+  "version": "1.0",
+  "scale": "1-1/2=1-0",
+  "metadata": {
+    "id": "typical-deck-detail",
+    "title": "Typical Deck Post-to-Footing & Beam Framing Detail",
+    "description": "Typical deck post-to-footing foundation, ABU standoff post base, notched double 2x8 beam, LUS joist hanger, 2x10 deck joist, and 2x6 decking assembly.",
+    "category": "Structural Framing",
+    "tags": [
+      "deck",
+      "foundation",
+      "footing",
+      "wood",
+      "framing",
+      "rebar",
+      "residential"
+    ],
+    "notes": [
+      "Origin (0, 0) is at the post/plinth/footing centerline on the top surface of the concrete plinth.",
+      "Monolithic concrete pier and spread footing with vertical plinth bars, horizontal ties, bottom longitudinal bar, and transverse footing rebar.",
+      "ABU standoff post base provides 1\" clearance above concrete plinth over embedded anchor bolt and square washer.",
+      "Double 2x8 beam cross-section at post/beam intersection carries 2x10 deck joist via LUS face-mount joist hanger and 2x6 decking with 1/4\" drainage gaps."
+    ]
+  },
+  "geometry": [
+    {
+      "componentId": "rebar_footing_bottom",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": -9,
+      "y": -23,
+      "rotation": 0,
+      "parameterOverrides": {
+        "barLength": 18,
+        "hookLength": 4,
+        "leftHook": "up",
+        "rightHook": "up"
+      }
+    },
+    {
+      "componentId": "rebar_footing_transverse",
+      "type": "ConstructReference",
+      "constructId": "rebar-section.json",
+      "x": -7.5,
+      "y": -22.45,
+      "rotation": 0,
+      "parameterOverrides": {
+        "rebarSize": "#5",
+        "gridX": 4,
+        "gridY": 1,
+        "spacingX": 5
+      }
+    },
+    {
+      "componentId": "rebar_plinth_left",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": -3,
+      "y": -2,
+      "rotation": -90,
+      "parameterOverrides": {
+        "barLength": 19.5,
+        "hookLength": 4.5,
+        "leftHook": "none",
+        "rightHook": "down"
+      }
+    },
+    {
+      "componentId": "rebar_plinth_right",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": 3,
+      "y": -2,
+      "rotation": -90,
+      "parameterOverrides": {
+        "barLength": 19.5,
+        "hookLength": 4.5,
+        "leftHook": "none",
+        "rightHook": "up"
+      }
+    },
+    {
+      "componentId": "rebar_plinth_tie_3",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": -3.5,
+      "y": -12,
+      "rotation": 0,
+      "parameterOverrides": {
+        "barLength": 7,
+        "leftHook": "none",
+        "rightHook": "none"
+      }
+    },
+    {
+      "componentId": "rebar_plinth_tie_2",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": -3.5,
+      "y": -8,
+      "rotation": 0,
+      "parameterOverrides": {
+        "barLength": 7,
+        "leftHook": "none",
+        "rightHook": "none"
+      }
+    },
+    {
+      "componentId": "rebar_plinth_tie_1",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": -3.5,
+      "y": -4,
+      "rotation": 0,
+      "parameterOverrides": {
+        "barLength": 7,
+        "leftHook": "none",
+        "rightHook": "none"
+      }
+    },
+    {
+      "componentId": "anchor_bolt_head",
+      "type": "CAD::Shape::Rectangle",
+      "x": -0.55,
+      "y": -6.9,
+      "width": 1.1,
+      "height": 0.4,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "anchor_bolt_washer",
+      "type": "CAD::Shape::Rectangle",
+      "x": -1,
+      "y": -6.5,
+      "width": 2,
+      "height": 0.5,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "anchor_bolt_shaft",
+      "type": "CAD::Shape::Rectangle",
+      "x": -0.3125,
+      "y": -6,
+      "width": 0.625,
+      "height": 6.75,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "concrete_plinth_footing",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          -5,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          -16
+        ],
+        [
+          12,
+          -16
+        ],
+        [
+          12,
+          -26
+        ],
+        [
+          -12,
+          -26
+        ],
+        [
+          -12,
+          -16
+        ],
+        [
+          -5,
+          -16
+        ]
+      ],
+      "closed": true,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "finish_grade_left",
+      "type": "CAD::Shape::Line",
+      "x1": -18,
+      "y1": -8,
+      "x2": -5,
+      "y2": -8,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "finish_grade_right",
+      "type": "CAD::Shape::Line",
+      "x1": 5,
+      "y1": -8,
+      "x2": 18,
+      "y2": -8,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "abu_post_base_bottom_plate",
+      "type": "CAD::Shape::Line",
+      "x1": -2.93,
+      "y1": 0.125,
+      "x2": 2.93,
+      "y2": 0.125,
+      "color": "auto",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "abu_post_base_u_flange",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          -2.75,
+          5.5
+        ],
+        [
+          -2.93,
+          5.5
+        ],
+        [
+          -2.93,
+          0
+        ],
+        [
+          2.93,
+          0
+        ],
+        [
+          2.93,
+          5.5
+        ],
+        [
+          2.75,
+          5.5
+        ]
+      ],
+      "closed": false,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "abu_post_base_standoff_leg_left",
+      "type": "CAD::Shape::Line",
+      "x1": -1.65,
+      "y1": 0.125,
+      "x2": -1.65,
+      "y2": 0.85,
+      "color": "auto",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "abu_post_base_standoff_leg_right",
+      "type": "CAD::Shape::Line",
+      "x1": 1.65,
+      "y1": 0.125,
+      "x2": 1.65,
+      "y2": 0.85,
+      "color": "auto",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "abu_post_base_standoff_seat",
+      "type": "CAD::Shape::Rectangle",
+      "x": -2.75,
+      "y": 0.85,
+      "width": 5.5,
+      "height": 0.15,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "anchor_bolt_top_washer",
+      "type": "CAD::Shape::Rectangle",
+      "x": -0.85,
+      "y": 0.125,
+      "width": 1.7,
+      "height": 0.125,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "anchor_bolt_top_nut",
+      "type": "CAD::Shape::Rectangle",
+      "x": -0.6,
+      "y": 0.25,
+      "width": 1.2,
+      "height": 0.4,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "wood_post",
+      "type": "CAD::Shape::Rectangle",
+      "x": -2.75,
+      "y": 1,
+      "width": 5.5,
+      "height": 35.25,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "beam_ply_left",
+      "type": "ConstructReference",
+      "constructId": "wood-section.json",
+      "x": 2.75,
+      "y": 13.75,
+      "rotation": 90,
+      "parameterOverrides": {
+        "lumberSize": "6x10"
+      }
+    },
+    {
+      "componentId": "lus_joist_hanger",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          2.75,
+          22
+        ],
+        [
+          2.75,
+          13.85
+        ],
+        [
+          4.75,
+          13.85
+        ],
+        [
+          4.75,
+          21
+        ],
+        [
+          3.75,
+          22
+        ],
+        [
+          2.75,
+          22
+        ]
+      ],
+      "closed": false,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "deck_joist",
+      "type": "CAD::Shape::Rectangle",
+      "x": 2.75,
+      "y": 14,
+      "width": 23,
+      "height": 9.25,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "lus_fastener_1",
+      "type": "CAD::Shape::Circle",
+      "cx": 3.35,
+      "cy": 15.85,
+      "r": 0.13,
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0
+    },
+    {
+      "componentId": "lus_fastener_2",
+      "type": "CAD::Shape::Circle",
+      "cx": 3.35,
+      "cy": 18.1625,
+      "r": 0.13,
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0
+    },
+    {
+      "componentId": "lus_fastener_3",
+      "type": "CAD::Shape::Circle",
+      "cx": 3.35,
+      "cy": 20.475,
+      "r": 0.13,
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0
+    },
+    {
+      "componentId": "lus_fastener_4",
+      "type": "CAD::Shape::Circle",
+      "cx": 4.15,
+      "cy": 16.775,
+      "r": 0.13,
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0
+    },
+    {
+      "componentId": "lus_fastener_5",
+      "type": "CAD::Shape::Circle",
+      "cx": 4.15,
+      "cy": 19.0875,
+      "r": 0.13,
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0
+    },
+    {
+      "componentId": "decking_board_1",
+      "type": "ConstructReference",
+      "constructId": "wood-section.json",
+      "x": 2.75,
+      "y": 23.25,
+      "rotation": 0,
+      "parameterOverrides": {
+        "lumberSize": "2x6"
+      }
+    },
+    {
+      "componentId": "decking_board_2",
+      "type": "ConstructReference",
+      "constructId": "wood-section.json",
+      "x": 8.5,
+      "y": 23.25,
+      "rotation": 0,
+      "parameterOverrides": {
+        "lumberSize": "2x6"
+      }
+    },
+    {
+      "componentId": "decking_board_3",
+      "type": "ConstructReference",
+      "constructId": "wood-section.json",
+      "x": 14.25,
+      "y": 23.25,
+      "rotation": 0,
+      "parameterOverrides": {
+        "lumberSize": "2x6"
+      }
+    },
+    {
+      "componentId": "decking_board_4",
+      "type": "ConstructReference",
+      "constructId": "wood-section.json",
+      "x": 20,
+      "y": 23.25,
+      "rotation": 0,
+      "parameterOverrides": {
+        "lumberSize": "2x6"
+      }
+    },
+    {
+      "componentId": "breakline_post_top",
+      "type": "ConstructReference",
+      "constructId": "breakline.json",
+      "x": 0,
+      "y": 32.25,
+      "rotation": 0,
+      "parameterOverrides": {
+        "length": 10,
+        "maskHeight": 6,
+        "maskSide": "top",
+        "scale": "1-1/2\" = 1'-0\""
+      }
+    },
+    {
+      "componentId": "breakline_deck_right",
+      "type": "ConstructReference",
+      "constructId": "breakline.json",
+      "x": 22,
+      "y": 19.375,
+      "rotation": 90,
+      "parameterOverrides": {
+        "length": 14.75,
+        "maskHeight": 5,
+        "maskSide": "bottom",
+        "scale": "1-1/2\" = 1'-0\""
+      }
+    }
+  ]
+}

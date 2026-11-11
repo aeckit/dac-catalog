@@ -1,0 +1,198 @@
+{
+  "type": "CAD::Construct",
+  "version": "1.0",
+  "scale": "1:1",
+  "metadata": {
+    "id": "breakline",
+    "title": "Architectural Breakline (Annotative)",
+    "description": "Parametric architectural breakline with annotative jog geometry and one-sided section cutoff wipeout mask.",
+    "category": "Annotation",
+    "tags": [
+      "symbol"
+    ],
+    "notes": [
+      "Annotative breakline maintains a physical ~3/8\" paper width and ~5/16\" amplitude across detail scales.",
+      "One-sided wipeout polygon masks out truncated assemblies beyond the breakline without obscuring the retained detail.",
+      "Continuous polyline stroke eliminates joint gaps and supports rotation (0-360 deg) and selectable mask side."
+    ]
+  },
+  "parameters": {
+    "length": {
+      "type": "number",
+      "default": 12,
+      "value": 12,
+      "min": 2,
+      "label": "Length"
+    },
+    "maskHeight": {
+      "type": "number",
+      "default": 4,
+      "value": 4,
+      "min": 0.5,
+      "label": "Mask Depth"
+    },
+    "maskSide": {
+      "type": "string",
+      "default": "bottom",
+      "value": "bottom",
+      "label": "Mask Side",
+      "options": [
+        {
+          "label": "Bottom / Discard Side (-Y)",
+          "value": "bottom",
+          "variables": {
+            "sign": -1
+          }
+        },
+        {
+          "label": "Top / Discard Side (+Y)",
+          "value": "top",
+          "variables": {
+            "sign": 1
+          }
+        }
+      ]
+    },
+    "rotation": {
+      "type": "number",
+      "default": 0,
+      "value": 0,
+      "min": 0,
+      "max": 360,
+      "label": "Rotation"
+    },
+    "scale": {
+      "type": "string",
+      "default": "1-1/2\" = 1'-0\"",
+      "value": "1-1/2\" = 1'-0\"",
+      "label": "Detail Scale",
+      "options": [
+        {
+          "label": "1:1 (Full size)",
+          "value": "1:1",
+          "variables": {
+            "jogWidth": 0.375,
+            "jogHeight": 0.3125
+          }
+        },
+        {
+          "label": "3\" = 1'-0\" (1/4 scale)",
+          "value": "3\" = 1'-0\"",
+          "variables": {
+            "jogWidth": 1.5,
+            "jogHeight": 1.25
+          }
+        },
+        {
+          "label": "1-1/2\" = 1'-0\" (1/8 scale)",
+          "value": "1-1/2\" = 1'-0\"",
+          "variables": {
+            "jogWidth": 3.0,
+            "jogHeight": 2.5
+          }
+        },
+        {
+          "label": "1\" = 1'-0\" (1/12 scale)",
+          "value": "1\" = 1'-0\"",
+          "variables": {
+            "jogWidth": 4.5,
+            "jogHeight": 3.75
+          }
+        },
+        {
+          "label": "3/4\" = 1'-0\" (1/16 scale)",
+          "value": "3/4\" = 1'-0\"",
+          "variables": {
+            "jogWidth": 6.0,
+            "jogHeight": 5.0
+          }
+        },
+        {
+          "label": "1/2\" = 1'-0\" (1/24 scale)",
+          "value": "1/2\" = 1'-0\"",
+          "variables": {
+            "jogWidth": 9.0,
+            "jogHeight": 7.5
+          }
+        }
+      ]
+    }
+  },
+  "geometry": [
+    {
+      "componentId": "breakline_mask",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          "(0 - ({parameters.length} / 2)) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "(0 - ({parameters.length} / 2)) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "(0 - ({parameters.scale.jogWidth} / 2)) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "(0 - ({parameters.scale.jogWidth} / 2)) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "(0 - ({parameters.scale.jogWidth} / 6)) * Math.cos({parameters.rotation} * Math.PI / 180) - ({parameters.scale.jogHeight} / 2) * Math.sin({parameters.rotation} * Math.PI / 180)",
+          "(0 - ({parameters.scale.jogWidth} / 6)) * Math.sin({parameters.rotation} * Math.PI / 180) + ({parameters.scale.jogHeight} / 2) * Math.cos({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "({parameters.scale.jogWidth} / 6) * Math.cos({parameters.rotation} * Math.PI / 180) - (0 - ({parameters.scale.jogHeight} / 2)) * Math.sin({parameters.rotation} * Math.PI / 180)",
+          "({parameters.scale.jogWidth} / 6) * Math.sin({parameters.rotation} * Math.PI / 180) + (0 - ({parameters.scale.jogHeight} / 2)) * Math.cos({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "({parameters.scale.jogWidth} / 2) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "({parameters.scale.jogWidth} / 2) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "({parameters.length} / 2) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "({parameters.length} / 2) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "({parameters.length} / 2) * Math.cos({parameters.rotation} * Math.PI / 180) - ({parameters.maskSide.sign} * {parameters.maskHeight}) * Math.sin({parameters.rotation} * Math.PI / 180)",
+          "({parameters.length} / 2) * Math.sin({parameters.rotation} * Math.PI / 180) + ({parameters.maskSide.sign} * {parameters.maskHeight}) * Math.cos({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "(0 - ({parameters.length} / 2)) * Math.cos({parameters.rotation} * Math.PI / 180) - ({parameters.maskSide.sign} * {parameters.maskHeight}) * Math.sin({parameters.rotation} * Math.PI / 180)",
+          "(0 - ({parameters.length} / 2)) * Math.sin({parameters.rotation} * Math.PI / 180) + ({parameters.maskSide.sign} * {parameters.maskHeight}) * Math.cos({parameters.rotation} * Math.PI / 180)"
+        ]
+      ],
+      "closed": true,
+      "color": "none",
+      "fill": "var(--cad-bg, #ffffff)",
+      "strokeWidth": 0
+    },
+    {
+      "componentId": "breakline_stroke",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          "(0 - ({parameters.length} / 2)) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "(0 - ({parameters.length} / 2)) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "(0 - ({parameters.scale.jogWidth} / 2)) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "(0 - ({parameters.scale.jogWidth} / 2)) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "(0 - ({parameters.scale.jogWidth} / 6)) * Math.cos({parameters.rotation} * Math.PI / 180) - ({parameters.scale.jogHeight} / 2) * Math.sin({parameters.rotation} * Math.PI / 180)",
+          "(0 - ({parameters.scale.jogWidth} / 6)) * Math.sin({parameters.rotation} * Math.PI / 180) + ({parameters.scale.jogHeight} / 2) * Math.cos({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "({parameters.scale.jogWidth} / 6) * Math.cos({parameters.rotation} * Math.PI / 180) - (0 - ({parameters.scale.jogHeight} / 2)) * Math.sin({parameters.rotation} * Math.PI / 180)",
+          "({parameters.scale.jogWidth} / 6) * Math.sin({parameters.rotation} * Math.PI / 180) + (0 - ({parameters.scale.jogHeight} / 2)) * Math.cos({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "({parameters.scale.jogWidth} / 2) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "({parameters.scale.jogWidth} / 2) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ],
+        [
+          "({parameters.length} / 2) * Math.cos({parameters.rotation} * Math.PI / 180)",
+          "({parameters.length} / 2) * Math.sin({parameters.rotation} * Math.PI / 180)"
+        ]
+      ],
+      "closed": false,
+      "color": "auto",
+      "strokeWidth": 1.0
+    }
+  ]
+}

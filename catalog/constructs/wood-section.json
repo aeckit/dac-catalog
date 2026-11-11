@@ -1,0 +1,161 @@
+{
+  "type": "CAD::Construct",
+  "version": "1.0",
+  "metadata": {
+    "id": "wood-section",
+    "title": "Nominal Lumber Cross Section",
+    "description": "Parametric nominal lumber and timber cross-section with standardized dimensional variable mapping and timber cross hatch.",
+    "category": "Wood Framing",
+    "tags": [
+      "wood"
+    ],
+    "notes": [
+      "Surfaced four sides (S4S) standard dimensional lumber and timbers.",
+      "TimberCross hatch indicates cross-grain cut in elevation/section."
+    ]
+  },
+  "parameters": {
+    "lumberSize": {
+      "type": "string",
+      "default": "2x4",
+      "value": "2x4",
+      "label": "Lumber Size",
+      "options": [
+        {
+          "label": "2x4 (1-1/2\" x 3-1/2\")",
+          "value": "2x4",
+          "variables": {
+            "width": 3.5,
+            "height": 1.5
+          }
+        },
+        {
+          "label": "2x6 (1-1/2\" x 5-1/2\")",
+          "value": "2x6",
+          "variables": {
+            "width": 5.5,
+            "height": 1.5
+          }
+        },
+        {
+          "label": "2x8 (1-1/2\" x 7-1/4\")",
+          "value": "2x8",
+          "variables": {
+            "width": 7.25,
+            "height": 1.5
+          }
+        },
+        {
+          "label": "2x10 (1-1/2\" x 9-1/4\")",
+          "value": "2x10",
+          "variables": {
+            "width": 9.25,
+            "height": 1.5
+          }
+        },
+        {
+          "label": "2x12 (1-1/2\" x 11-1/4\")",
+          "value": "2x12",
+          "variables": {
+            "width": 11.25,
+            "height": 1.5
+          }
+        },
+        {
+          "label": "4x4 (3-1/2\" x 3-1/2\")",
+          "value": "4x4",
+          "variables": {
+            "width": 3.5,
+            "height": 3.5
+          }
+        },
+        {
+          "label": "4x6 (3-1/2\" x 5-1/2\")",
+          "value": "4x6",
+          "variables": {
+            "width": 5.5,
+            "height": 3.5
+          }
+        },
+        {
+          "label": "4x8 (3-1/2\" x 7-1/4\")",
+          "value": "4x8",
+          "variables": {
+            "width": 7.25,
+            "height": 3.5
+          }
+        },
+        {
+          "label": "4x10 (3-1/2\" x 9-1/4\")",
+          "value": "4x10",
+          "variables": {
+            "width": 9.25,
+            "height": 3.5
+          }
+        },
+        {
+          "label": "4x12 (3-1/2\" x 11-1/4\")",
+          "value": "4x12",
+          "variables": {
+            "width": 11.25,
+            "height": 3.5
+          }
+        },
+        {
+          "label": "6x6 (5-1/2\" x 5-1/2\")",
+          "value": "6x6",
+          "variables": {
+            "width": 5.5,
+            "height": 5.5
+          }
+        },
+        {
+          "label": "6x8 (5-1/2\" x 7-1/2\")",
+          "value": "6x8",
+          "variables": {
+            "width": 7.5,
+            "height": 5.5
+          }
+        },
+        {
+          "label": "6x10 (5-1/2\" x 9-1/2\")",
+          "value": "6x10",
+          "variables": {
+            "width": 9.5,
+            "height": 5.5
+          }
+        },
+        {
+          "label": "6x12 (5-1/2\" x 11-1/2\")",
+          "value": "6x12",
+          "variables": {
+            "width": 11.5,
+            "height": 5.5
+          }
+        },
+        {
+          "label": "8x8 (7-1/2\" x 7-1/2\")",
+          "value": "8x8",
+          "variables": {
+            "width": 7.5,
+            "height": 7.5
+          }
+        }
+      ]
+    }
+  },
+  "geometry": [
+    {
+      "componentId": "lumber_body",
+      "type": "CAD::Shape::Rectangle",
+      "x": 0,
+      "y": 0,
+      "width": "{parameters.lumberSize.width}",
+      "height": "{parameters.lumberSize.height}",
+      "color": "auto",
+      "fill": "",
+      "hatch": "TimberCross",
+      "strokeWidth": 2.0
+    }
+  ]
+}

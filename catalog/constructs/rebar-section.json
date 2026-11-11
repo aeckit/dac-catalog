@@ -1,0 +1,379 @@
+{
+  "type": "CAD::Construct",
+  "version": "1.0",
+  "metadata": {
+    "id": "rebar-section",
+    "title": "Rebar Section Array",
+    "category": "Concrete Reinforcement",
+    "tags": [
+      "structural",
+      "concrete",
+      "rebar"
+    ],
+    "description": "Parametric reinforcing bar section array representing solid rebar dots with selectable ASTM sizes, horizontal/vertical spacing, and grid dimensions.",
+    "notes": [
+      "Solid filled dots flip contrast automatically between Paper theme (#000000) and Blueprint theme (#f8fafc) via var(--cad-stroke).",
+      "Cartesian origin (0, 0) is located at the center of the bottom-left rebar.",
+      "Supports grid arrays from 1x1 up to 6x4 bars with independent horizontal and vertical spacing."
+    ]
+  },
+  "scale": "1:1",
+  "parameters": {
+    "rebarSize": {
+      "type": "string",
+      "default": "#4",
+      "value": "#4",
+      "label": "Rebar Size",
+      "options": [
+        {
+          "value": "#3",
+          "label": "#3 (3/8\" dia.)",
+          "variables": {
+            "diameter": 0.375,
+            "radius": 0.1875
+          }
+        },
+        {
+          "value": "#4",
+          "label": "#4 (1/2\" dia.)",
+          "variables": {
+            "diameter": 0.500,
+            "radius": 0.2500
+          }
+        },
+        {
+          "value": "#5",
+          "label": "#5 (5/8\" dia.)",
+          "variables": {
+            "diameter": 0.625,
+            "radius": 0.3125
+          }
+        },
+        {
+          "value": "#6",
+          "label": "#6 (3/4\" dia.)",
+          "variables": {
+            "diameter": 0.750,
+            "radius": 0.3750
+          }
+        },
+        {
+          "value": "#7",
+          "label": "#7 (7/8\" dia.)",
+          "variables": {
+            "diameter": 0.875,
+            "radius": 0.4375
+          }
+        },
+        {
+          "value": "#8",
+          "label": "#8 (1\" dia.)",
+          "variables": {
+            "diameter": 1.000,
+            "radius": 0.5000
+          }
+        },
+        {
+          "value": "#9",
+          "label": "#9 (1-1/8\" dia.)",
+          "variables": {
+            "diameter": 1.128,
+            "radius": 0.5640
+          }
+        },
+        {
+          "value": "#10",
+          "label": "#10 (1-1/4\" dia.)",
+          "variables": {
+            "diameter": 1.270,
+            "radius": 0.6350
+          }
+        },
+        {
+          "value": "#11",
+          "label": "#11 (1-3/8\" dia.)",
+          "variables": {
+            "diameter": 1.410,
+            "radius": 0.7050
+          }
+        }
+      ]
+    },
+    "gridX": {
+      "type": "number",
+      "default": 2,
+      "value": 2,
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Bars Across (gridX)"
+    },
+    "gridY": {
+      "type": "number",
+      "default": 1,
+      "value": 1,
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Bars High (gridY)"
+    },
+    "spacingX": {
+      "type": "number",
+      "default": 6,
+      "value": 6,
+      "min": 1,
+      "step": 0.25,
+      "label": "Horizontal Spacing (in)"
+    },
+    "spacingY": {
+      "type": "number",
+      "default": 6,
+      "value": 6,
+      "min": 1,
+      "step": 0.25,
+      "label": "Vertical Spacing (in)"
+    }
+  },
+  "geometry": [
+    {
+      "componentId": "bar_0_0",
+      "type": "CAD::Shape::Circle",
+      "cx": "0",
+      "cy": "0",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 0 && {parameters.gridY} > 0"
+    },
+    {
+      "componentId": "bar_1_0",
+      "type": "CAD::Shape::Circle",
+      "cx": "1 * {parameters.spacingX}",
+      "cy": "0",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 1 && {parameters.gridY} > 0"
+    },
+    {
+      "componentId": "bar_2_0",
+      "type": "CAD::Shape::Circle",
+      "cx": "2 * {parameters.spacingX}",
+      "cy": "0",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 2 && {parameters.gridY} > 0"
+    },
+    {
+      "componentId": "bar_3_0",
+      "type": "CAD::Shape::Circle",
+      "cx": "3 * {parameters.spacingX}",
+      "cy": "0",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 3 && {parameters.gridY} > 0"
+    },
+    {
+      "componentId": "bar_4_0",
+      "type": "CAD::Shape::Circle",
+      "cx": "4 * {parameters.spacingX}",
+      "cy": "0",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 4 && {parameters.gridY} > 0"
+    },
+    {
+      "componentId": "bar_5_0",
+      "type": "CAD::Shape::Circle",
+      "cx": "5 * {parameters.spacingX}",
+      "cy": "0",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 5 && {parameters.gridY} > 0"
+    },
+    {
+      "componentId": "bar_0_1",
+      "type": "CAD::Shape::Circle",
+      "cx": "0",
+      "cy": "1 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 0 && {parameters.gridY} > 1"
+    },
+    {
+      "componentId": "bar_1_1",
+      "type": "CAD::Shape::Circle",
+      "cx": "1 * {parameters.spacingX}",
+      "cy": "1 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 1 && {parameters.gridY} > 1"
+    },
+    {
+      "componentId": "bar_2_1",
+      "type": "CAD::Shape::Circle",
+      "cx": "2 * {parameters.spacingX}",
+      "cy": "1 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 2 && {parameters.gridY} > 1"
+    },
+    {
+      "componentId": "bar_3_1",
+      "type": "CAD::Shape::Circle",
+      "cx": "3 * {parameters.spacingX}",
+      "cy": "1 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 3 && {parameters.gridY} > 1"
+    },
+    {
+      "componentId": "bar_4_1",
+      "type": "CAD::Shape::Circle",
+      "cx": "4 * {parameters.spacingX}",
+      "cy": "1 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 4 && {parameters.gridY} > 1"
+    },
+    {
+      "componentId": "bar_5_1",
+      "type": "CAD::Shape::Circle",
+      "cx": "5 * {parameters.spacingX}",
+      "cy": "1 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 5 && {parameters.gridY} > 1"
+    },
+    {
+      "componentId": "bar_0_2",
+      "type": "CAD::Shape::Circle",
+      "cx": "0",
+      "cy": "2 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 0 && {parameters.gridY} > 2"
+    },
+    {
+      "componentId": "bar_1_2",
+      "type": "CAD::Shape::Circle",
+      "cx": "1 * {parameters.spacingX}",
+      "cy": "2 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 1 && {parameters.gridY} > 2"
+    },
+    {
+      "componentId": "bar_2_2",
+      "type": "CAD::Shape::Circle",
+      "cx": "2 * {parameters.spacingX}",
+      "cy": "2 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 2 && {parameters.gridY} > 2"
+    },
+    {
+      "componentId": "bar_3_2",
+      "type": "CAD::Shape::Circle",
+      "cx": "3 * {parameters.spacingX}",
+      "cy": "2 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 3 && {parameters.gridY} > 2"
+    },
+    {
+      "componentId": "bar_4_2",
+      "type": "CAD::Shape::Circle",
+      "cx": "4 * {parameters.spacingX}",
+      "cy": "2 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 4 && {parameters.gridY} > 2"
+    },
+    {
+      "componentId": "bar_5_2",
+      "type": "CAD::Shape::Circle",
+      "cx": "5 * {parameters.spacingX}",
+      "cy": "2 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 5 && {parameters.gridY} > 2"
+    },
+    {
+      "componentId": "bar_0_3",
+      "type": "CAD::Shape::Circle",
+      "cx": "0",
+      "cy": "3 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 0 && {parameters.gridY} > 3"
+    },
+    {
+      "componentId": "bar_1_3",
+      "type": "CAD::Shape::Circle",
+      "cx": "1 * {parameters.spacingX}",
+      "cy": "3 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 1 && {parameters.gridY} > 3"
+    },
+    {
+      "componentId": "bar_2_3",
+      "type": "CAD::Shape::Circle",
+      "cx": "2 * {parameters.spacingX}",
+      "cy": "3 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 2 && {parameters.gridY} > 3"
+    },
+    {
+      "componentId": "bar_3_3",
+      "type": "CAD::Shape::Circle",
+      "cx": "3 * {parameters.spacingX}",
+      "cy": "3 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 3 && {parameters.gridY} > 3"
+    },
+    {
+      "componentId": "bar_4_3",
+      "type": "CAD::Shape::Circle",
+      "cx": "4 * {parameters.spacingX}",
+      "cy": "3 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 4 && {parameters.gridY} > 3"
+    },
+    {
+      "componentId": "bar_5_3",
+      "type": "CAD::Shape::Circle",
+      "cx": "5 * {parameters.spacingX}",
+      "cy": "3 * {parameters.spacingY}",
+      "r": "{parameters.rebarSize.radius}",
+      "fill": "var(--cad-stroke, #000000)",
+      "strokeWidth": 0,
+      "visible": "{parameters.gridX} > 5 && {parameters.gridY} > 3"
+    }
+  ]
+}

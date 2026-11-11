@@ -1,0 +1,127 @@
+{
+  "type": "CAD::Construct",
+  "version": "1.0",
+  "scale": "1:1",
+  "metadata": {
+    "id": "rebar-longitudinal",
+    "title": "Longitudinal Rebar",
+    "category": "Concrete Reinforcement",
+    "tags": [
+      "structural",
+      "concrete",
+      "rebar",
+      "longitudinal"
+    ],
+    "description": "Parametric longitudinal reinforcing bar with configurable overall bar length and 90-degree hooks on left or right ends (turned up or down).",
+    "notes": [
+      "Cartesian origin (0, 0) is located at the left end of the horizontal bar centerline.",
+      "Uses polyline cornerRadius (1.75 in) for smooth 90-degree hook bends and a constant 4.0 pt reinforcement strokeWidth.",
+      "Left and right 90-degree hooks can be independently turned up (+Y), turned down (-Y), or disabled for straight runs."
+    ]
+  },
+  "parameters": {
+    "barLength": {
+      "type": "number",
+      "default": 24,
+      "value": 24,
+      "min": 4,
+      "step": 1,
+      "label": "Bar Length (in)"
+    },
+    "hookLength": {
+      "type": "number",
+      "default": 8,
+      "value": 8,
+      "min": 2,
+      "step": 0.5,
+      "label": "Hook Length (in)"
+    },
+    "leftHook": {
+      "type": "string",
+      "default": "none",
+      "value": "none",
+      "label": "Left 90° Hook",
+      "options": [
+        {
+          "value": "none",
+          "label": "None (Straight)",
+          "variables": {
+            "dir": 0
+          }
+        },
+        {
+          "value": "up",
+          "label": "Turned Up (+Y)",
+          "variables": {
+            "dir": 1
+          }
+        },
+        {
+          "value": "down",
+          "label": "Turned Down (-Y)",
+          "variables": {
+            "dir": -1
+          }
+        }
+      ]
+    },
+    "rightHook": {
+      "type": "string",
+      "default": "up",
+      "value": "up",
+      "label": "Right 90° Hook",
+      "options": [
+        {
+          "value": "none",
+          "label": "None (Straight)",
+          "variables": {
+            "dir": 0
+          }
+        },
+        {
+          "value": "up",
+          "label": "Turned Up (+Y)",
+          "variables": {
+            "dir": 1
+          }
+        },
+        {
+          "value": "down",
+          "label": "Turned Down (-Y)",
+          "variables": {
+            "dir": -1
+          }
+        }
+      ]
+    }
+  },
+  "geometry": [
+    {
+      "componentId": "rebar_bar",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          0,
+          "{parameters.leftHook.dir} * {parameters.hookLength}"
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          "{parameters.barLength}",
+          0
+        ],
+        [
+          "{parameters.barLength}",
+          "{parameters.rightHook.dir} * {parameters.hookLength}"
+        ]
+      ],
+      "closed": false,
+      "cornerRadius": 1.75,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 4.0
+    }
+  ]
+}
