@@ -10,7 +10,7 @@ import {
 } from '@aeckit/dac-solid';
 import { renderSolvedDetail, PaperTheme, BlueprintTheme } from '@aeckit/dac-renderer-svg';
 import { solveDetailDocument } from '@aeckit/dac-json-solver';
-import { X, Copy, Check, Download, ExternalLink } from 'lucide-solid';
+import { X, Copy, Check, Download } from 'lucide-solid';
 
 export interface DetailModalProps {
   item: CatalogItem | null;
@@ -76,17 +76,6 @@ function ModalContent(props: {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Failed to export SVG:', err);
-    }
-  };
-
-  const getPlaygroundUrl = () => {
-    const currentDoc = doc();
-    if (!currentDoc) return '#';
-    try {
-      const encoded = encodeURIComponent(JSON.stringify(currentDoc));
-      return `https://aeckit.github.io/dac/#doc=${encoded}`;
-    } catch {
-      return 'https://aeckit.github.io/dac/';
     }
   };
 
@@ -234,16 +223,6 @@ function ModalContent(props: {
                 SVG
               </button>
             </div>
-
-            <a
-              href={getPlaygroundUrl()}
-              target="_blank"
-              rel="noreferrer"
-              class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors shadow-sm"
-            >
-              <ExternalLink class="w-3.5 h-3.5" />
-              Open in Playground
-            </a>
           </div>
         </div>
       </div>
