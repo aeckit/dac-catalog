@@ -1,4 +1,4 @@
-import { createSignal, createEffect, createMemo, onMount, onCleanup, Show, For } from 'solid-js';
+import { createSignal, createEffect, onMount, onCleanup, Show } from 'solid-js';
 import type { CatalogItem } from '../types';
 import {
   DacProvider,
@@ -39,95 +39,9 @@ function ModalContent(props: {
   nestedDocs?: Map<string, any>;
   onClose: () => void;
 }) {
-  const { doc, selectedShape } = useDac();
+  const { doc } = useDac();
   const [viewMode, setViewMode] = createSignal<'form' | 'json'>('form');
   const [copied, setCopied] = createSignal(false);
-
-  // Context-aware metadata and notes (top-level vs selected element)
-  const notesData = createMemo(() => {
-    const shape = selectedShape();
-    if (shape) {
-      // 1. Element-level metadata and notes
-      const notesList: string[] = [];
-      if (Array.isArray(shape.notes)) {
-        notesList.push(...shape.notes);
-      } else if (typeof shape.notes === 'string') {
-        notesList.push(shape.notes);
-      }
-      if (typeof shape.note === 'string' && !notesList.includes(shape.note)) {
-        notesList.push(shape.note);
-      }
-
-      const metaProps: { key: string; value: string }[] = [];
-      if (shape.description) metaProps.push({ key: 'description', value: String(shape.description) });
-      if (shape.spec) metaProps.push({ key: 'spec', value: String(shape.spec) });
-      if (shape.material) metaProps.push({ key: 'material', value: String(shape.material) });
-      if (shape.tag) metaProps.push({ key: 'tag', value: String(shape.tag) });
-      if (shape.comments) metaProps.push({ key: 'comments', value: String(shape.comments) });
-
-      if (shape.metadata && typeof shape.metadata === 'object') {
-        for (const [k, v] of Object.entries(shape.metadata)) {
-          if (k === 'notes' || k === 'note') {
-            if (Array.isArray(v)) notesList.push(...v);
-            else if (typeof v === 'string') notesList.push(v);
-          } else if (v !== undefined && v !== null && typeof v !== 'object') {
-            metaProps.push({ key: k, value: String(v) });
-          }
-        }
-      }
-
-      const hasContent = notesList.length > 0 || metaProps.length > 0;
-      return {
-        isElement: true,
-        elementId: shape.componentId || shape.type || 'Selected Element',
-        notes: notesList,
-        properties: metaProps,
-        hasContent,
-      };
-    }
-
-    // 2. Detail / Document-level metadata and notes (nothing selected)
-    const d = doc();
-    const docMeta = d?.metadata || props.item.metadata || {};
-    const notesList: string[] = [];
-    if (Array.isArray(docMeta.notes)) {
-      notesList.push(...docMeta.notes);
-    } else if (typeof docMeta.notes === 'string') {
-      notesList.push(docMeta.notes);
-    }
-    if (Array.isArray(d?.notes)) {
-      d.notes.forEach((n: any) => {
-        if (typeof n === 'string' && !notesList.includes(n)) notesList.push(n);
-      });
-    } else if (typeof d?.notes === 'string' && !notesList.includes(d.notes)) {
-      notesList.push(d.notes);
-    }
-
-    const metaProps: { key: string; value: string }[] = [];
-    if (docMeta.description && docMeta.description !== 'Parametric Drawing-as-Code architectural detail.') {
-      metaProps.push({ key: 'description', value: String(docMeta.description) });
-    }
-    if (docMeta.author) metaProps.push({ key: 'author', value: String(docMeta.author) });
-    if (docMeta.category) metaProps.push({ key: 'category', value: String(docMeta.category) });
-    if (Array.isArray(docMeta.tags) && docMeta.tags.length > 0) {
-      metaProps.push({ key: 'tags', value: docMeta.tags.map((t: string) => `#${t}`).join(' ') });
-    }
-
-    for (const [k, v] of Object.entries(docMeta)) {
-      if (!['notes', 'note', 'description', 'author', 'category', 'tags', 'id', 'title'].includes(k) && typeof v !== 'object' && v !== undefined && v !== null) {
-        metaProps.push({ key: k, value: String(v) });
-      }
-    }
-
-    const hasContent = notesList.length > 0 || metaProps.length > 0;
-    return {
-      isElement: false,
-      elementId: null,
-      notes: notesList,
-      properties: metaProps,
-      hasContent,
-    };
-  });
 
   const handleCopyJson = async () => {
     const currentDoc = doc();
@@ -271,63 +185,6 @@ function ModalContent(props: {
             <Show when={viewMode() === 'form'}>
               <div class="[&>div]:!p-0 [&>div]:!bg-transparent [&>div]:!overflow-visible space-y-5 font-mono text-xs">
                 <DacInspector />
-              </div>
-
-              {/* Notes Section at the Bottom of Form View */}
-              <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
-                <div class="flex items-center justify-between mb-2">
-                  <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                    Notes
-                  </h3>
-                  <Show when={notesData().isElement}>
-                    <span class="text-[10px] font-mono text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
-                      {notesData().elementId}
-                    </span>
-                  </Show>
-                </div>
-
-                <Show
-                  when={notesData().hasContent}
-                  fallback={
-                    <p class="text-xs font-mono text-slate-400 dark:text-slate-500 italic p-2 bg-slate-50 dark:bg-slate-950/40 rounded border border-slate-200 dark:border-slate-800/60">
-                      {notesData().isElement ? `No notes for ${notesData().elementId}` : 'No notes defined for this detail.'}
-                    </p>
-                  }
-                >
-                  <div class="space-y-2">
-                    {/* Key-Value Metadata Properties */}
-                    <Show when={notesData().properties.length > 0}>
-                      <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 space-y-1.5">
-                        <For each={notesData().properties}>
-                          {(prop) => (
-                            <div class="flex items-baseline gap-2 text-xs font-mono">
-                              <span class="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400 min-w-[70px]">
-                                {prop.key}
-                              </span>
-                              <span class="text-slate-700 dark:text-slate-300 break-words flex-1">
-                                {prop.value}
-                              </span>
-                            </div>
-                          )}
-                        </For>
-                      </div>
-                    </Show>
-
-                    {/* Numbered Notes List */}
-                    <Show when={notesData().notes.length > 0}>
-                      <ul class="space-y-2">
-                        <For each={notesData().notes}>
-                          {(note, idx) => (
-                            <li class="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2 bg-slate-50 dark:bg-slate-950/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800/80">
-                              <span class="text-amber-600 dark:text-amber-400 font-mono text-[10px] mt-0.5">{idx() + 1}.</span>
-                              <span class="leading-relaxed font-mono flex-1">{note}</span>
-                            </li>
-                          )}
-                        </For>
-                      </ul>
-                    </Show>
-                  </div>
-                </Show>
               </div>
             </Show>
 
