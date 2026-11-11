@@ -2,16 +2,18 @@ import { createSignal, createMemo, createEffect } from 'solid-js';
 import {
   catalogItems,
   catalogNestedDocs,
-  getAllCategories,
+  getCategoriesForKind,
+  getKindCounts,
   filterCatalogItems,
 } from './lib/catalog';
-import type { CatalogItem } from './types';
+import type { CatalogItem, DocumentKind } from './types';
 import { Header } from './components/Header';
 import { DetailCard } from './components/DetailCard';
 import { DetailModal } from './components/DetailModal';
 import { SearchX } from 'lucide-solid';
 
 export default function App() {
+  const [activeKind, setActiveKind] = createSignal<DocumentKind>('detail');
   const [searchQuery, setSearchQuery] = createSignal('');
   const [selectedCategory, setSelectedCategory] = createSignal('All');
   const [selectedItem, setSelectedItem] = createSignal<CatalogItem | null>(null);
@@ -28,22 +30,32 @@ export default function App() {
     setTheme(t => t === 'light' ? 'dark' : 'light');
   };
 
-  const categories = getAllCategories();
+  const handleSelectKind = (kind: DocumentKind) => {
+    setActiveKind(kind);
+    setSelectedCategory('All');
+    setSearchQuery('');
+  };
+
+  const kindCounts = createMemo(() => getKindCounts(catalogItems));
+  const categories = createMemo(() => getCategoriesForKind(catalogItems, activeKind()));
 
   const filteredItems = createMemo(() => {
-    return filterCatalogItems(catalogItems, searchQuery(), selectedCategory());
+    return filterCatalogItems(catalogItems, searchQuery(), selectedCategory(), activeKind());
   });
 
   return (
     <div class="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
       {/* Sticky Header */}
       <Header
+        activeKind={activeKind()}
+        onSelectKind={handleSelectKind}
+        kindCounts={kindCounts()}
         searchQuery={searchQuery()}
         onSearchChange={setSearchQuery}
-        categories={categories}
+        categories={categories()}
         selectedCategory={selectedCategory()}
         onSelectCategory={setSelectedCategory}
-        totalCount={catalogItems.length}
+        totalCount={kindCounts()[activeKind()]}
         filteredCount={filteredItems().length}
         theme={theme()}
         onToggleTheme={toggleTheme}
@@ -56,16 +68,18 @@ export default function App() {
             <div class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 mb-3 shadow-xs">
               <SearchX class="w-6 h-6" />
             </div>
-            <h2 class="text-base font-semibold text-slate-800 dark:text-slate-200">No matching details found</h2>
+            <h2 class="text-base font-semibold text-slate-800 dark:text-slate-200">
+              No matching {activeKind()}s found
+            </h2>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md">
-              No architectural details matched "{searchQuery()}". Try clearing filters or searching for terms like "timber", "joist", or "framing".
+              No architectural {activeKind()}s matched "{searchQuery()}". Try clearing filters or searching for terms like "timber", "joist", or "framing".
             </p>
             <button
               onClick={() => {
                 setSearchQuery('');
                 setSelectedCategory('All');
               }}
-              class="mt-4 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors"
+              class="mt-4 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors font-mono"
             >
               Reset Filters
             </button>
@@ -85,9 +99,9 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer class="border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950/40 py-6 text-center text-xs text-slate-500 transition-colors">
+      <footer class="border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950/40 py-6 text-center text-xs text-slate-500 transition-colors font-mono">
         <p>
-          Powered by <a href="https://github.com/aeckit/dac" class="text-amber-600 dark:text-amber-500 hover:underline font-medium">Drawing-as-Code (DaC)</a> & <a href="https://www.solidjs.com" class="text-slate-700 dark:text-slate-400 hover:underline">SolidJS</a> • Open-source AEC CAD components
+          Powered by <a href="https://github.com/aeckit/dac" target="_blank" rel="noreferrer" class="text-amber-600 dark:text-amber-500 hover:underline font-medium">DaC</a> • Submit a detail at <a href="https://github.com/aeckit/dac-catalog" target="_blank" rel="noreferrer" class="text-amber-600 dark:text-amber-500 hover:underline font-medium">dac-catalog</a>
         </p>
       </footer>
 
