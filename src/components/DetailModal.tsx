@@ -1,13 +1,14 @@
-import { createSignal, createEffect, onMount, onCleanup, Show } from 'solid-js';
+import { createSignal, createEffect, createMemo, onMount, onCleanup, Show, For } from 'solid-js';
 import type { CatalogItem } from '../types';
 import {
   DacProvider,
   DacCanvas,
   DacInspector,
   DacZoomControls,
+  DacPlaybackControls,
   useDac,
 } from '@aeckit/dac-solid';
-import { renderSolvedDetail } from '@aeckit/dac-renderer-svg';
+import { renderSolvedDetail, PaperTheme, BlueprintTheme } from '@aeckit/dac-renderer-svg';
 import { solveDetailDocument } from '@aeckit/dac-json-solver';
 import { X, Copy, Check, Download, ExternalLink } from 'lucide-solid';
 
@@ -38,9 +39,95 @@ function ModalContent(props: {
   nestedDocs?: Map<string, any>;
   onClose: () => void;
 }) {
-  const { doc } = useDac();
+  const { doc, selectedShape } = useDac();
   const [viewMode, setViewMode] = createSignal<'form' | 'json'>('form');
   const [copied, setCopied] = createSignal(false);
+
+  // Context-aware metadata and notes (top-level vs selected element)
+  const notesData = createMemo(() => {
+    const shape = selectedShape();
+    if (shape) {
+      // 1. Element-level metadata and notes
+      const notesList: string[] = [];
+      if (Array.isArray(shape.notes)) {
+        notesList.push(...shape.notes);
+      } else if (typeof shape.notes === 'string') {
+        notesList.push(shape.notes);
+      }
+      if (typeof shape.note === 'string' && !notesList.includes(shape.note)) {
+        notesList.push(shape.note);
+      }
+
+      const metaProps: { key: string; value: string }[] = [];
+      if (shape.description) metaProps.push({ key: 'description', value: String(shape.description) });
+      if (shape.spec) metaProps.push({ key: 'spec', value: String(shape.spec) });
+      if (shape.material) metaProps.push({ key: 'material', value: String(shape.material) });
+      if (shape.tag) metaProps.push({ key: 'tag', value: String(shape.tag) });
+      if (shape.comments) metaProps.push({ key: 'comments', value: String(shape.comments) });
+
+      if (shape.metadata && typeof shape.metadata === 'object') {
+        for (const [k, v] of Object.entries(shape.metadata)) {
+          if (k === 'notes' || k === 'note') {
+            if (Array.isArray(v)) notesList.push(...v);
+            else if (typeof v === 'string') notesList.push(v);
+          } else if (v !== undefined && v !== null && typeof v !== 'object') {
+            metaProps.push({ key: k, value: String(v) });
+          }
+        }
+      }
+
+      const hasContent = notesList.length > 0 || metaProps.length > 0;
+      return {
+        isElement: true,
+        elementId: shape.componentId || shape.type || 'Selected Element',
+        notes: notesList,
+        properties: metaProps,
+        hasContent,
+      };
+    }
+
+    // 2. Detail / Document-level metadata and notes (nothing selected)
+    const d = doc();
+    const docMeta = d?.metadata || props.item.metadata || {};
+    const notesList: string[] = [];
+    if (Array.isArray(docMeta.notes)) {
+      notesList.push(...docMeta.notes);
+    } else if (typeof docMeta.notes === 'string') {
+      notesList.push(docMeta.notes);
+    }
+    if (Array.isArray(d?.notes)) {
+      d.notes.forEach((n: any) => {
+        if (typeof n === 'string' && !notesList.includes(n)) notesList.push(n);
+      });
+    } else if (typeof d?.notes === 'string' && !notesList.includes(d.notes)) {
+      notesList.push(d.notes);
+    }
+
+    const metaProps: { key: string; value: string }[] = [];
+    if (docMeta.description && docMeta.description !== 'Parametric Drawing-as-Code architectural detail.') {
+      metaProps.push({ key: 'description', value: String(docMeta.description) });
+    }
+    if (docMeta.author) metaProps.push({ key: 'author', value: String(docMeta.author) });
+    if (docMeta.category) metaProps.push({ key: 'category', value: String(docMeta.category) });
+    if (Array.isArray(docMeta.tags) && docMeta.tags.length > 0) {
+      metaProps.push({ key: 'tags', value: docMeta.tags.map((t: string) => `#${t}`).join(' ') });
+    }
+
+    for (const [k, v] of Object.entries(docMeta)) {
+      if (!['notes', 'note', 'description', 'author', 'category', 'tags', 'id', 'title'].includes(k) && typeof v !== 'object' && v !== undefined && v !== null) {
+        metaProps.push({ key: k, value: String(v) });
+      }
+    }
+
+    const hasContent = notesList.length > 0 || metaProps.length > 0;
+    return {
+      isElement: false,
+      elementId: null,
+      notes: notesList,
+      properties: metaProps,
+      hasContent,
+    };
+  });
 
   const handleCopyJson = async () => {
     const currentDoc = doc();
@@ -61,7 +148,8 @@ function ModalContent(props: {
     try {
       const resolver = (id: string) => props.nestedDocs?.get(id);
       const solved = solveDetailDocument(currentDoc, 24, 18, resolver);
-      const svgString = renderSolvedDetail(solved, false, props.theme || 'light');
+      const svgTheme = props.theme === 'dark' ? BlueprintTheme : PaperTheme;
+      const svgString = renderSolvedDetail(solved, false, svgTheme);
 
       const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(blob);
@@ -118,17 +206,31 @@ function ModalContent(props: {
       <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         
         {/* Interactive Canvas */}
-        <div class="flex-1 h-full min-h-[350px] relative bg-slate-100 dark:bg-slate-950 overflow-hidden">
+        <div class="flex-1 h-full min-h-[350px] relative bg-white dark:bg-slate-950 overflow-hidden">
           <ModalCanvasController doc={doc()} />
-          <DacCanvas />
-          {/* Floating Zoom & Fit Controls in Canvas */}
-          <div class="absolute bottom-3 left-3 z-10 pointer-events-auto">
-            <DacZoomControls />
+          <DacCanvas showGizmoActions={false} showGizmoHandles={false} />
+          {/* Floating Playback & Zoom Controls in Canvas */}
+          <div class="absolute bottom-4 left-4 z-10 flex flex-col items-start gap-2 pointer-events-none">
+            <div class="pointer-events-auto">
+              <DacPlaybackControls />
+            </div>
+            <div class="pointer-events-auto">
+              <DacZoomControls style={{ margin: '0' }} />
+            </div>
           </div>
         </div>
 
         {/* Side Controls Panel */}
-        <div class="w-full md:w-80 lg:w-96 border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 flex flex-col h-72 md:h-full z-20">
+        <div 
+          class="w-full md:w-80 lg:w-96 border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-72 md:h-full z-20"
+          style={{
+            "--app-bg-panel": "transparent",
+            "--app-bg-main": props.theme === "dark" ? "#0f172a" : "#f8fafc",
+            "--app-border": props.theme === "dark" ? "rgba(51, 65, 85, 0.8)" : "rgba(203, 213, 225, 0.8)",
+            "--app-text": props.theme === "dark" ? "#f8fafc" : "#0f172a",
+            "--app-text-muted": props.theme === "dark" ? "#94a3b8" : "#64748b"
+          }}
+        >
           
           {/* Form vs JSON Toggle Header */}
           <div class="px-4 py-2.5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 flex items-center justify-between">
@@ -136,7 +238,7 @@ function ModalContent(props: {
               Properties
             </span>
 
-            <div class="flex rounded-md p-0.5 bg-slate-200 dark:bg-slate-800 text-xs">
+            <div class="flex rounded-md p-0.5 bg-slate-200 dark:bg-slate-800 text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setViewMode('form')}
@@ -167,26 +269,66 @@ function ModalContent(props: {
             
             {/* 1. FORM VIEW: Canonical DacInspector from @aeckit/dac-solid */}
             <Show when={viewMode() === 'form'}>
-              <div>
+              <div class="[&>div]:!p-0 [&>div]:!bg-transparent [&>div]:!overflow-visible space-y-5 font-mono text-xs">
                 <DacInspector />
               </div>
 
-              {/* Architectural Notes at the Bottom of Form View */}
-              <Show when={props.item.metadata.notes && props.item.metadata.notes.length > 0}>
-                <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
-                  <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
-                    Architectural Notes & Specs
+              {/* Notes Section at the Bottom of Form View */}
+              <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Notes
                   </h3>
-                  <ul class="space-y-2">
-                    {props.item.metadata.notes?.map((note, idx) => (
-                      <li class="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2 bg-slate-50 dark:bg-slate-950/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800/80">
-                        <span class="text-amber-600 dark:text-amber-400 font-mono text-[10px] mt-0.5">{idx + 1}.</span>
-                        <span class="leading-relaxed">{note}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <Show when={notesData().isElement}>
+                    <span class="text-[10px] font-mono text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">
+                      {notesData().elementId}
+                    </span>
+                  </Show>
                 </div>
-              </Show>
+
+                <Show
+                  when={notesData().hasContent}
+                  fallback={
+                    <p class="text-xs font-mono text-slate-400 dark:text-slate-500 italic p-2 bg-slate-50 dark:bg-slate-950/40 rounded border border-slate-200 dark:border-slate-800/60">
+                      {notesData().isElement ? `No notes for ${notesData().elementId}` : 'No notes defined for this detail.'}
+                    </p>
+                  }
+                >
+                  <div class="space-y-2">
+                    {/* Key-Value Metadata Properties */}
+                    <Show when={notesData().properties.length > 0}>
+                      <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 space-y-1.5">
+                        <For each={notesData().properties}>
+                          {(prop) => (
+                            <div class="flex items-baseline gap-2 text-xs font-mono">
+                              <span class="text-[10px] uppercase font-semibold text-slate-500 dark:text-slate-400 min-w-[70px]">
+                                {prop.key}
+                              </span>
+                              <span class="text-slate-700 dark:text-slate-300 break-words flex-1">
+                                {prop.value}
+                              </span>
+                            </div>
+                          )}
+                        </For>
+                      </div>
+                    </Show>
+
+                    {/* Numbered Notes List */}
+                    <Show when={notesData().notes.length > 0}>
+                      <ul class="space-y-2">
+                        <For each={notesData().notes}>
+                          {(note, idx) => (
+                            <li class="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2 bg-slate-50 dark:bg-slate-950/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800/80">
+                              <span class="text-amber-600 dark:text-amber-400 font-mono text-[10px] mt-0.5">{idx() + 1}.</span>
+                              <span class="leading-relaxed font-mono flex-1">{note}</span>
+                            </li>
+                          )}
+                        </For>
+                      </ul>
+                    </Show>
+                  </div>
+                </Show>
+              </div>
             </Show>
 
             {/* 2. JSON VIEW: Live Document JSON */}
@@ -214,12 +356,12 @@ function ModalContent(props: {
           </div>
 
           {/* Bottom Actions Bar */}
-          <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col gap-2">
+          <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col gap-2 font-mono">
             <div class="flex items-center gap-2">
               <button
                 type="button"
                 onClick={handleCopyJson}
-                class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors shadow-xs"
+                class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors shadow-xs"
               >
                 {copied() ? <Check class="w-3.5 h-3.5 text-emerald-500" /> : <Copy class="w-3.5 h-3.5" />}
                 {copied() ? 'Copied JSON!' : 'Copy JSON'}
@@ -228,7 +370,7 @@ function ModalContent(props: {
               <button
                 type="button"
                 onClick={handleExportSvg}
-                class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors shadow-xs"
+                class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-colors shadow-xs"
                 title="Export SVG"
               >
                 <Download class="w-3.5 h-3.5" />
@@ -240,7 +382,7 @@ function ModalContent(props: {
               href={getPlaygroundUrl()}
               target="_blank"
               rel="noreferrer"
-              class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors shadow-sm"
+              class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors shadow-sm"
             >
               <ExternalLink class="w-3.5 h-3.5" />
               Open in Playground
@@ -274,7 +416,7 @@ export function DetailModal(props: DetailModalProps) {
           <DacProvider
             doc={JSON.parse(JSON.stringify(item().doc))}
             nestedDocs={props.nestedDocs}
-            canvasTheme={props.theme || 'light'}
+            canvasTheme={props.theme === 'dark' ? BlueprintTheme : PaperTheme}
           >
             <ModalContent
               item={item()}
