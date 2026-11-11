@@ -1,4 +1,4 @@
-import { Search, X, Github, Sun, Moon } from 'lucide-solid';
+import { Search, X, Github, Sun, Moon, ExternalLink } from 'lucide-solid';
 import { Show } from 'solid-js';
 import type { DocumentKind } from '../types';
 
@@ -106,6 +106,17 @@ export function Header(props: HeaderProps) {
           </div>
 
           <div class="flex items-center gap-2 self-end sm:self-auto">
+            <a
+              href="https://aeckit.github.io/dac/"
+              target="_blank"
+              rel="noreferrer"
+              class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs leading-4 font-mono font-medium text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 transition-colors"
+              title="Open DaC Playground"
+            >
+              <span>Playground</span>
+              <ExternalLink class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+            </a>
+
             {/* Dark / Light Mode Toggle */}
             <button
               onClick={props.onToggleTheme}
