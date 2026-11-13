@@ -1,0 +1,616 @@
+{
+  "type": "CAD::Detail",
+  "version": "1.0",
+  "scale": "1-1/2\" = 1'-0\"",
+  "metadata": {
+    "id": "retaining-wall-slab-foundation",
+    "title": "Retaining Wall at Slab-on-Grade Detail",
+    "description": "Concrete retaining stem wall with spread footing, slab-on-grade, holdown hardware, and wood shear wall framing.",
+    "category": "Foundation",
+    "tags": [
+      "foundation",
+      "concrete",
+      "wood"
+    ],
+    "notes": [
+      "Origin (0, 0) is at the exterior corner at the top of the concrete stem wall (underside of sill plate).",
+      "Wood framing includes 2x sill plate, vertical stud, exterior shearwall sheathing with edge nailing, and holdown assembly."
+    ]
+  },
+  "geometry": [
+    {
+      "componentId": "sill_plate",
+      "type": "ConstructReference",
+      "constructId": "wood-section.json",
+      "x": 0,
+      "y": 0,
+      "rotation": 0,
+      "parameterOverrides": {
+        "lumberSize": "2x6"
+      }
+    },
+    {
+      "componentId": "rebar_stem_footing_l_bar",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": 2,
+      "y": -33,
+      "rotation": 0,
+      "parameterOverrides": {
+        "barLength": 12,
+        "hookLength": 31,
+        "leftHook": "up",
+        "rightHook": "none"
+      }
+    },
+    {
+      "componentId": "rebar_footing_transverse",
+      "type": "ConstructReference",
+      "constructId": "rebar-section.json",
+      "x": 5,
+      "y": -32.5,
+      "rotation": 0,
+      "parameterOverrides": {
+        "rebarSize": "#4",
+        "gridX": 3,
+        "gridY": 1,
+        "spacingX": 4
+      }
+    },
+    {
+      "componentId": "rebar_stem_dot_top",
+      "type": "ConstructReference",
+      "constructId": "rebar-section.json",
+      "x": 2.75,
+      "y": -3.5,
+      "rotation": 0,
+      "parameterOverrides": {
+        "rebarSize": "#4",
+        "gridX": 1,
+        "gridY": 1
+      }
+    },
+    {
+      "componentId": "rebar_stem_dot_mid",
+      "type": "ConstructReference",
+      "constructId": "rebar-section.json",
+      "x": 2.75,
+      "y": -9,
+      "rotation": 0,
+      "parameterOverrides": {
+        "rebarSize": "#4",
+        "gridX": 1,
+        "gridY": 1
+      }
+    },
+    {
+      "componentId": "rebar_stem_dot_low",
+      "type": "ConstructReference",
+      "constructId": "rebar-section.json",
+      "x": 2.75,
+      "y": -24,
+      "rotation": 0,
+      "parameterOverrides": {
+        "rebarSize": "#4",
+        "gridX": 1,
+        "gridY": 1
+      }
+    },
+    {
+      "componentId": "rebar_stem_dot_top_right",
+      "type": "ConstructReference",
+      "constructId": "rebar-section.json",
+      "x": 6.75,
+      "y": -2,
+      "rotation": 0,
+      "parameterOverrides": {
+        "rebarSize": "#4",
+        "gridX": 1,
+        "gridY": 1
+      }
+    },
+    {
+      "componentId": "rebar_slab_longitudinal",
+      "type": "ConstructReference",
+      "constructId": "rebar-longitudinal.json",
+      "x": 9.5,
+      "y": -17.5,
+      "rotation": 0,
+      "parameterOverrides": {
+        "barLength": 16,
+        "leftHook": "none",
+        "rightHook": "none"
+      }
+    },
+    {
+      "componentId": "rebar_slab_transverse",
+      "type": "ConstructReference",
+      "constructId": "rebar-section.json",
+      "x": 12,
+      "y": -18,
+      "rotation": 0,
+      "parameterOverrides": {
+        "rebarSize": "#3",
+        "gridX": 3,
+        "gridY": 1,
+        "spacingX": 5
+      }
+    },
+    {
+      "componentId": "breakline_framing_top",
+      "type": "ConstructReference",
+      "constructId": "breakline.json",
+      "x": 2.75,
+      "y": 25,
+      "rotation": 0,
+      "parameterOverrides": {
+        "length": 10,
+        "maskHeight": 4,
+        "maskSide": "top",
+        "scale": "1-1/2\" = 1'-0\""
+      }
+    },
+    {
+      "componentId": "breakline_stem_upper",
+      "type": "ConstructReference",
+      "constructId": "breakline.json",
+      "x": 4,
+      "y": -11,
+      "rotation": 0,
+      "parameterOverrides": {
+        "length": 11,
+        "maskHeight": 0.05,
+        "maskSide": "bottom",
+        "scale": "1-1/2\" = 1'-0\""
+      }
+    },
+    {
+      "componentId": "breakline_stem_lower",
+      "type": "ConstructReference",
+      "constructId": "breakline.json",
+      "x": 4,
+      "y": -13.5,
+      "rotation": 0,
+      "parameterOverrides": {
+        "length": 11,
+        "maskHeight": 0.05,
+        "maskSide": "top",
+        "scale": "1-1/2\" = 1'-0\""
+      }
+    },
+    {
+      "componentId": "breakline_slab_right",
+      "type": "ConstructReference",
+      "constructId": "breakline.json",
+      "x": 26,
+      "y": -20,
+      "rotation": 90,
+      "parameterOverrides": {
+        "length": 12,
+        "maskHeight": 4,
+        "maskSide": "bottom",
+        "scale": "1-1/2\" = 1'-0\""
+      }
+    },
+    {
+      "componentId": "stem_wall_upper_left",
+      "type": "CAD::Shape::Line",
+      "x1": 0,
+      "y1": 0,
+      "x2": 0,
+      "y2": -11,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "stem_wall_top",
+      "type": "CAD::Shape::Line",
+      "x1": 0,
+      "y1": 0,
+      "x2": 8,
+      "y2": 0,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "stem_wall_upper_right",
+      "type": "CAD::Shape::Line",
+      "x1": 8,
+      "y1": 0,
+      "x2": 8,
+      "y2": -11,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "stem_wall_lower_left",
+      "type": "CAD::Shape::Line",
+      "x1": 0,
+      "y1": -13.5,
+      "x2": 0,
+      "y2": -26,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "stem_wall_lower_right_upper",
+      "type": "CAD::Shape::Line",
+      "x1": 8,
+      "y1": -13.5,
+      "x2": 8,
+      "y2": -16,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "stem_wall_lower_right_lower",
+      "type": "CAD::Shape::Line",
+      "x1": 8,
+      "y1": -16,
+      "x2": 8,
+      "y2": -26,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "footing_top_left",
+      "type": "CAD::Shape::Line",
+      "x1": -4,
+      "y1": -26,
+      "x2": 0,
+      "y2": -26,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "footing_top_right",
+      "type": "CAD::Shape::Line",
+      "x1": 8,
+      "y1": -26,
+      "x2": 16,
+      "y2": -26,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "footing_left",
+      "type": "CAD::Shape::Line",
+      "x1": -4,
+      "y1": -26,
+      "x2": -4,
+      "y2": -36,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "footing_bottom",
+      "type": "CAD::Shape::Line",
+      "x1": -4,
+      "y1": -36,
+      "x2": 16,
+      "y2": -36,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "footing_right",
+      "type": "CAD::Shape::Line",
+      "x1": 16,
+      "y1": -26,
+      "x2": 16,
+      "y2": -36,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "stem_wall_keyway",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          0,
+          -26
+        ],
+        [
+          2.25,
+          -26
+        ],
+        [
+          2.75,
+          -27.5
+        ],
+        [
+          5.25,
+          -27.5
+        ],
+        [
+          5.75,
+          -26
+        ],
+        [
+          8,
+          -26
+        ]
+      ],
+      "closed": false,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 1.5
+    },
+    {
+      "componentId": "slab_top",
+      "type": "CAD::Shape::Line",
+      "x1": 8,
+      "y1": -16,
+      "x2": 26,
+      "y2": -16,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "slab_bottom",
+      "type": "CAD::Shape::Line",
+      "x1": 8,
+      "y1": -20,
+      "x2": 26,
+      "y2": -20,
+      "color": "auto",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "wall_stud_right",
+      "type": "CAD::Shape::Line",
+      "x1": 5.5,
+      "y1": 1.5,
+      "x2": 5.5,
+      "y2": 25,
+      "color": "auto",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "shearwall_sheathing",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          -0.5,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          25
+        ],
+        [
+          -0.5,
+          25
+        ]
+      ],
+      "closed": true,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "sheathing_nail_1",
+      "type": "CAD::Shape::Line",
+      "x1": -0.5,
+      "y1": 3,
+      "x2": 0.75,
+      "y2": 3,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "sheathing_nail_2",
+      "type": "CAD::Shape::Line",
+      "x1": -0.5,
+      "y1": 9,
+      "x2": 0.75,
+      "y2": 9,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "sheathing_nail_3",
+      "type": "CAD::Shape::Line",
+      "x1": -0.5,
+      "y1": 15,
+      "x2": 0.75,
+      "y2": 15,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "sheathing_nail_4",
+      "type": "CAD::Shape::Line",
+      "x1": -0.5,
+      "y1": 21,
+      "x2": 0.75,
+      "y2": 21,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "holdown_bracket",
+      "type": "CAD::Shape::Polyline",
+      "points": [
+        [
+          2,
+          1.625
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          3.5,
+          10
+        ],
+        [
+          3.5,
+          1.625
+        ]
+      ],
+      "closed": true,
+      "color": "auto",
+      "fill": "none",
+      "strokeDasharray": "4,3",
+      "strokeWidth": 1.5
+    },
+    {
+      "componentId": "holdown_fastener_1",
+      "type": "CAD::Shape::Circle",
+      "cx": 2.75,
+      "cy": 4.5,
+      "r": 0.18,
+      "strokeDasharray": "3,2",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "holdown_fastener_2",
+      "type": "CAD::Shape::Circle",
+      "cx": 2.75,
+      "cy": 6.5,
+      "r": 0.18,
+      "strokeDasharray": "3,2",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "holdown_fastener_3",
+      "type": "CAD::Shape::Circle",
+      "cx": 2.75,
+      "cy": 8.5,
+      "r": 0.18,
+      "strokeDasharray": "3,2",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "anchor_bolt_plate_washer",
+      "type": "CAD::Shape::Rectangle",
+      "x": 1.9,
+      "y": 1.5,
+      "width": 1.7,
+      "height": 0.1875,
+      "color": "auto",
+      "fill": "none",
+      "strokeWidth": 1.5
+    },
+    {
+      "componentId": "holdown_nut_washer",
+      "type": "CAD::Shape::Rectangle",
+      "x": 2.15,
+      "y": 1.6875,
+      "width": 1.2,
+      "height": 0.5,
+      "color": "auto",
+      "fill": "none",
+      "strokeDasharray": "4,3",
+      "strokeWidth": 1.5
+    },
+    {
+      "componentId": "anchor_bolt_top_stud",
+      "type": "CAD::Shape::Line",
+      "x1": 2.75,
+      "y1": 2.1875,
+      "x2": 2.75,
+      "y2": 2.85,
+      "color": "auto",
+      "strokeDasharray": "4,3",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "anchor_bolt_shaft_plate",
+      "type": "CAD::Shape::Line",
+      "x1": 2.75,
+      "y1": 1.5,
+      "x2": 2.75,
+      "y2": 0,
+      "color": "auto",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "anchor_bolt_shaft_concrete",
+      "type": "CAD::Shape::Line",
+      "x1": 2.75,
+      "y1": 0,
+      "x2": 2.75,
+      "y2": -8,
+      "color": "auto",
+      "strokeDasharray": "4,3",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "anchor_bolt_hook",
+      "type": "CAD::Shape::Line",
+      "x1": 2.75,
+      "y1": -8,
+      "x2": 4,
+      "y2": -8,
+      "color": "auto",
+      "strokeDasharray": "4,3",
+      "strokeWidth": 2
+    },
+    {
+      "componentId": "finish_grade_exterior",
+      "type": "CAD::Shape::Line",
+      "x1": -18,
+      "y1": -8,
+      "x2": 0,
+      "y2": -8,
+      "color": "auto",
+      "strokeWidth": 3
+    },
+    {
+      "componentId": "earth_hatch_footing_1",
+      "type": "CAD::Shape::Line",
+      "x1": -2,
+      "y1": -36,
+      "x2": -4,
+      "y2": -38,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "earth_hatch_footing_2",
+      "type": "CAD::Shape::Line",
+      "x1": 2,
+      "y1": -36,
+      "x2": 0,
+      "y2": -38,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "earth_hatch_footing_3",
+      "type": "CAD::Shape::Line",
+      "x1": 6,
+      "y1": -36,
+      "x2": 4,
+      "y2": -38,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "earth_hatch_footing_4",
+      "type": "CAD::Shape::Line",
+      "x1": 10,
+      "y1": -36,
+      "x2": 8,
+      "y2": -38,
+      "color": "auto",
+      "strokeWidth": 1
+    },
+    {
+      "componentId": "earth_hatch_footing_5",
+      "type": "CAD::Shape::Line",
+      "x1": 14,
+      "y1": -36,
+      "x2": 12,
+      "y2": -38,
+      "color": "auto",
+      "strokeWidth": 1
+    }
+  ]
+}
