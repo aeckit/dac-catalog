@@ -1,0 +1,145 @@
+{
+  "type": "CAD::Construct",
+  "version": "1.0",
+  "scale": "1:1",
+  "metadata": {
+    "id": "nail",
+    "title": "Common Nail",
+    "description": "Parametric architectural nail symbol composed of a head line and variable-length shaft line for standard pennyweight sizes (4d to 60d, defaulting to 8d).",
+    "category": "Fasteners",
+    "tags": [
+      "fastener",
+      "nail",
+      "wood",
+      "framing",
+      "structural"
+    ],
+    "notes": [
+      "Origin (0, 0) is located at the center of the nail head where the head meets the shaft.",
+      "Shaft extends along +X from (0, 0) to the selected pennyweight length (ASTM F1667 common nail dimensions; default 8d = 2-1/2\").",
+      "Composed of two 1.0 pt fine-weight lines (head and shaft) per DaC drawing standards; use ConstructReference rotation to orient into framing members."
+    ]
+  },
+  "parameters": {
+    "nailSize": {
+      "type": "string",
+      "default": "8d",
+      "value": "8d",
+      "label": "Nail Size",
+      "options": [
+        {
+          "value": "4d",
+          "label": "4d Common (1-1/2\" length)",
+          "variables": {
+            "length": 1.5,
+            "headWidth": 0.25,
+            "headRadius": 0.125
+          }
+        },
+        {
+          "value": "6d",
+          "label": "6d Common (2\" length)",
+          "variables": {
+            "length": 2.0,
+            "headWidth": 0.266,
+            "headRadius": 0.133
+          }
+        },
+        {
+          "value": "8d",
+          "label": "8d Common (2-1/2\" length)",
+          "variables": {
+            "length": 2.5,
+            "headWidth": 0.281,
+            "headRadius": 0.1405
+          }
+        },
+        {
+          "value": "10d",
+          "label": "10d Common (3\" length)",
+          "variables": {
+            "length": 3.0,
+            "headWidth": 0.3125,
+            "headRadius": 0.15625
+          }
+        },
+        {
+          "value": "12d",
+          "label": "12d Common (3-1/4\" length)",
+          "variables": {
+            "length": 3.25,
+            "headWidth": 0.3125,
+            "headRadius": 0.15625
+          }
+        },
+        {
+          "value": "16d",
+          "label": "16d Common (3-1/2\" length)",
+          "variables": {
+            "length": 3.5,
+            "headWidth": 0.344,
+            "headRadius": 0.172
+          }
+        },
+        {
+          "value": "20d",
+          "label": "20d Common (4\" length)",
+          "variables": {
+            "length": 4.0,
+            "headWidth": 0.406,
+            "headRadius": 0.203
+          }
+        },
+        {
+          "value": "30d",
+          "label": "30d Common (4-1/2\" length)",
+          "variables": {
+            "length": 4.5,
+            "headWidth": 0.4375,
+            "headRadius": 0.21875
+          }
+        },
+        {
+          "value": "40d",
+          "label": "40d Common (5\" length)",
+          "variables": {
+            "length": 5.0,
+            "headWidth": 0.46875,
+            "headRadius": 0.234375
+          }
+        },
+        {
+          "value": "60d",
+          "label": "60d Common (6\" length)",
+          "variables": {
+            "length": 6.0,
+            "headWidth": 0.53125,
+            "headRadius": 0.265625
+          }
+        }
+      ]
+    }
+  },
+  "geometry": [
+    {
+      "componentId": "nail_head",
+      "type": "CAD::Shape::Line",
+      "x1": 0,
+      "y1": "-({parameters.nailSize.headRadius})",
+      "x2": 0,
+      "y2": "{parameters.nailSize.headRadius}",
+      "color": "auto",
+      "strokeWidth": 1.0
+    },
+    {
+      "componentId": "nail_shaft",
+      "type": "CAD::Shape::Line",
+      "x1": 0,
+      "y1": 0,
+      "x2": "{parameters.nailSize.length}",
+      "y2": 0,
+      "color": "auto",
+      "strokeWidth": 1.0
+    }
+  ]
+}
