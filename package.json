@@ -12,7 +12,7 @@
     "@aeckit/dac-json-solver": "^0.3.1",
     "@aeckit/dac-renderer-svg": "^0.3.0",
     "@aeckit/dac-schema": "^0.4.1",
-    "@aeckit/dac-solid": "^0.6.0",
+    "@aeckit/dac-solid": "^1.0.0",
     "@solidjs/web": "^2.0.4",
     "solid-js": "^2.0.4"
   },
