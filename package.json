@@ -17,7 +17,6 @@
     "solid-js": "^2.0.4"
   },
   "devDependencies": {
-    "@rolldown/binding-darwin-arm64": "1.2.19",
     "@solidjs/vite-plugin": "^3.0.1",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
