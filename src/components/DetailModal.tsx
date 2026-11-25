@@ -1,4 +1,4 @@
-import { createSignal, createEffect, onMount, onCleanup, Show } from 'solid-js';
+import { createSignal, createTrackedEffect, onSettled, Show } from 'solid-js';
 import type { CatalogItem } from '../types';
 import {
   DacProvider,
@@ -10,7 +10,7 @@ import {
 } from '@aeckit/dac-solid';
 import { renderSolvedDetail, PaperTheme, BlueprintTheme } from '@aeckit/dac-renderer-svg';
 import { solveDetailDocument } from '@aeckit/dac-json-solver';
-import { X, Copy, Check, Download } from 'lucide-solid';
+import { X, Copy, Check, Download } from './icons';
 
 export interface DetailModalProps {
   item: CatalogItem | null;
@@ -23,10 +23,14 @@ export interface DetailModalProps {
 function ModalCanvasController(props: { doc: any }) {
   const { fitView } = useDac();
 
-  createEffect(() => {
+  createTrackedEffect(() => {
     const _ = props.doc;
-    setTimeout(() => fitView(), 60);
-    setTimeout(() => fitView(), 240);
+    const t1 = setTimeout(() => fitView(), 60);
+    const t2 = setTimeout(() => fitView(), 240);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   });
 
   return null;
@@ -238,11 +242,11 @@ export function DetailModal(props: DetailModalProps) {
     }
   };
 
-  onMount(() => {
+  onSettled(() => {
     window.addEventListener('keydown', handleKeyDown);
-  });
-  onCleanup(() => {
-    window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   });
 
   return (

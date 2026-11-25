@@ -1,4 +1,4 @@
-import { Search, X, Github, Sun, Moon, ExternalLink } from 'lucide-solid';
+import { Search, X, Github, Sun, Moon, ExternalLink } from './icons';
 import { Show } from 'solid-js';
 import type { DocumentKind } from '../types';
 

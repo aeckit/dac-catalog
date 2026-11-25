@@ -1,4 +1,4 @@
-import { createSignal, createMemo, createEffect } from 'solid-js';
+import { createSignal, createMemo, createTrackedEffect } from 'solid-js';
 import {
   catalogItems,
   catalogNestedDocs,
@@ -10,7 +10,7 @@ import type { CatalogItem, DocumentKind } from './types';
 import { Header } from './components/Header';
 import { DetailCard } from './components/DetailCard';
 import { DetailModal } from './components/DetailModal';
-import { SearchX } from 'lucide-solid';
+import { SearchX } from './components/icons';
 
 export default function App() {
   const [activeKind, setActiveKind] = createSignal<DocumentKind>('detail');
@@ -21,7 +21,7 @@ export default function App() {
   // Theme state: defaults to 'light'
   const [theme, setTheme] = createSignal<'light' | 'dark'>('light');
 
-  createEffect(() => {
+  createTrackedEffect(() => {
     const isDark = theme() === 'dark';
     document.documentElement.classList.toggle('dark', isDark);
   });
